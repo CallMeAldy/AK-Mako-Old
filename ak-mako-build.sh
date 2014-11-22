@@ -10,16 +10,16 @@ clear
 
 # AK Kernel Version
 BASE_AK_VER="AK"
-VER=".360.MAKO.CM"
+VER=".500.MAKO.CM"
 AK_VER=$BASE_AK_VER$VER
 
 # AK Variables
 export LOCALVERSION="~"`echo $AK_VER`
-export CROSS_COMPILE=${HOME}/android/AK-linaro/4.9.2-2014.08.20140831.CR83/bin/arm-cortex_a15-linux-gnueabihf-
+export CROSS_COMPILE=${HOME}/android/AK-Kernel/AK-linaro/4.9.2-2014.10/bin/arm-cortex_a15-linux-gnueabihf-
 export ARCH=arm
 export SUBARCH=arm
 export KBUILD_BUILD_USER=CallMeAldy
-export KBUILD_BUILD_HOST="BuildBox"
+export KBUILD_BUILD_HOST="Phoenix"
 
 DATE_START=$(date +"%s")
 
@@ -41,14 +41,14 @@ echo "Show: AK Mako Settings"
 echo "------------------------"
 echo -e "${restore}"
 
-MODULES_DIR=${HOME}/android/AK-Mako-AnyKernel/cwm/system/lib/modules
+MODULES_DIR=${HOME}/android/AK-Kernel/AK-Mako-AnyKernel/cwm/system/lib/modules
 KERNEL_DIR=`pwd`
-OUTPUT_DIR=${HOME}/android/AK-Mako-AnyKernel/zip
-CWM_DIR=${HOME}/android/AK-Mako-AnyKernel/cwm
-ZIMAGE_DIR=${HOME}/android/AK-Mako/arch/arm/boot
-CWM_MOVE=${HOME}/android/AK-releases
-ZIMAGE_ANYKERNEL=${HOME}/android/AK-Mako-AnyKernel/cwm/kernel
-ANYKERNEL_DIR=${HOME}/android/AK-Mako-AnyKernel
+OUTPUT_DIR=${HOME}/android/AK-Kernel/AK-Mako-AnyKernel/zip
+CWM_DIR=${HOME}/android/AK-Kernel/AK-Mako-AnyKernel/cwm
+ZIMAGE_DIR=${HOME}/android/AK-Kernel/AK-Mako/arch/arm/boot
+CWM_MOVE=${HOME}/android/AK-Kernel/AK-releases
+ZIMAGE_ANYKERNEL=${HOME}/android/AK-Kernel/AK-Mako-AnyKernel/cwm/kernel
+ANYKERNEL_DIR=${HOME}/android/AK-Kernel/AK-Mako-AnyKernel
 
 echo -e "${red}"; echo "COMPILING VERSION:"; echo -e "${blink_red}"; echo "$LOCALVERSION"; echo -e "${restore}"
 echo "CROSS_COMPILE="$CROSS_COMPILE
@@ -69,7 +69,7 @@ echo "-------------------------"
 echo -e "${restore}"
 
 make "ak_mako_defconfig"
-make -j9
+make -j4
 
 echo -e "${green}"
 echo "--------------------------"
