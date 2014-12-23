@@ -70,18 +70,7 @@ function make_zip {
 DATE_START=$(date +"%s")
 
 echo -e "${green}"
-<<<<<<< HEAD
-echo "--------------------------"
-echo "Copy: Modules to direcroty"
-echo "--------------------------"
-echo -e "${restore}"
-
-rm `echo $MODULES_DIR"/*"`
-find $KERNEL_DIR -name '*.ko' -exec cp -v {} $MODULES_DIR \;
-echo
-=======
 echo "AK Kernel Creation Script:"
->>>>>>> 0685dcc... New Life
 
 echo "---------------"
 echo "Kernel Version:"
