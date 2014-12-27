@@ -76,18 +76,18 @@ static void check_temp(struct work_struct *work)
 	tsens_get_temp(&tsens_dev, &temp);
 
 	if (temp > temp_max) {
-		freq_max = table[limit_idx - 6].frequency;
-		polling = HZ/6;
+		freq_max = table[limit_idx - 8].frequency;
+		polling = HZ/8;
 
 	} else if (temp > temp_max - 2) {
-		freq_max = table[limit_idx - 4].frequency;
+		freq_max = table[limit_idx - 5].frequency;
 		polling = HZ/4;
 
-	} else if (temp > temp_max - 4) {
+	} else if (temp > temp_max - 5) {
 		freq_max = table[limit_idx - 2].frequency;
 		polling = HZ/2;
 
-	} else if (temp > temp_max - 8) {
+	} else if (temp > temp_max - 10) {
 		polling = HZ;
 
 	} else {
