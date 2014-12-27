@@ -9,6 +9,7 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  *
+ * 2012 Enhanced by motley <motley.slate@gmail.com>
  */
 
 #include <linux/kernel.h>
@@ -23,6 +24,23 @@
 #include <linux/platform_device.h>
 #include <linux/of.h>
 #include <mach/cpufreq.h>
+#include <linux/reboot.h>
+
+/*
+ * Controls
+ * DEFAULT_THROTTLE_TEMP - default throttle temp at boot time
+ * MAX_THROTTLE_TEMP - max able to be set by user
+ * COOL_TEMP - temp in C where where we can slow down polling
+ * COOL_TEMP_OFFSET_MS - number of ms to add to polling time when temps are cool
+ * HOT_TEMP_OFFSET_MS - number of ms to subtract from polling time when temps are hot
+ * DEFAULT_MIN_FREQ_INDEX - frequency table index for the lowest frequency to drop to during throttling
+ * */
+#define DEFAULT_THROTTLE_TEMP		70
+#define MAX_THROTTLE_TEMP			80
+#define COOL_TEMP					45
+#define COOL_TEMP_OFFSET_MS			250
+#define HOT_TEMP_OFFSET_MS			250
+#define DEFAULT_MIN_FREQ_INDEX		7
 
 #define DEFAULT_TEMP_MAX	85
 
@@ -56,7 +74,7 @@ static void get_freq_table_limit_idx(void)
 	while (table[i].frequency != CPUFREQ_TABLE_END)
 		i++;
 
-	limit_idx = i - 1;
+
 }
 
 static void check_temp(struct work_struct *work)
@@ -71,6 +89,7 @@ static void check_temp(struct work_struct *work)
 
 	if (freq_buffer == 0)
 		freq_buffer = freq_max;
+
 
 	tsens_dev.sensor_num = msm_thermal_info.sensor_id;
 	tsens_get_temp(&tsens_dev, &temp);
@@ -104,6 +123,7 @@ static void check_temp(struct work_struct *work)
 
 	schedule_delayed_work(&check_temp_work, polling);
 }
+
 
 int __devinit msm_thermal_init(struct msm_thermal_data *pdata)
 {
