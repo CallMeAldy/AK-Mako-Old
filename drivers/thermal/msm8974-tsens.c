@@ -154,7 +154,6 @@ struct tsens_tm_device {
 	int				calib_len;
 	struct resource			*res_tsens_mem;
 	struct resource			*res_calib_mem;
-	struct work_struct		tsens_work;
 	struct tsens_tm_device_sensor	sensor[0];
 };
 
@@ -428,10 +427,9 @@ static void notify_uspace_tsens_fn(struct work_struct *work)
 					NULL, "type");
 }
 
-static void tsens_scheduler_fn(struct work_struct *work)
+static irqreturn_t tsens_isr(int irq, void *data)
 {
-	struct tsens_tm_device *tm = container_of(work, struct tsens_tm_device,
-						tsens_work);
+	struct tsens_tm_device *tm = data;
 	unsigned int i, status, threshold;
 	unsigned int sensor_status_addr, sensor_status_ctrl_addr;
 
@@ -465,12 +463,6 @@ static void tsens_scheduler_fn(struct work_struct *work)
 		sensor_status_ctrl_addr += TSENS_SN_ADDR_OFFSET;
 	}
 	mb();
-}
-
-static irqreturn_t tsens_isr(int irq, void *data)
-{
-	schedule_work(&tmdev->tsens_work);
-
 	return IRQ_HANDLED;
 }
 
@@ -854,8 +846,6 @@ static int __devinit _tsens_register_thermal(void)
 		goto fail;
 	}
 	platform_set_drvdata(pdev, tmdev);
-
-	INIT_WORK(&tmdev->tsens_work, tsens_scheduler_fn);
 
 	return 0;
 fail:
